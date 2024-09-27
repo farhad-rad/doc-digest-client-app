@@ -25,6 +25,8 @@ jobs:
       - name: Check last commit for #stable
         id: check_commit
         run: |
+          echo "Commit message:"
+          git log -1 --pretty=%B
           if git log -1 --pretty=%B | grep "#stable"; then
             echo "STABLE_COMMIT=true" >> "$GITHUB_OUTPUT"
           else
