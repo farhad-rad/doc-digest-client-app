@@ -16,22 +16,21 @@ jobs:
       - name: Checkout client repository
         uses: actions/checkout@v3
         
-      # - name: Fetch all branches
-      #   run: git fetch --all
-        
-      # - name: Checkout main branch
-      #   run: git checkout main
-  
       - name: Check last commit for #stable
         id: check_commit
         run: |
           if git log -1 --pretty=%B | grep "#stable"; then
             echo "STABLE_COMMIT=true" >> "$GITHUB_OUTPUT"
+            echo "STABLE_COMMIT_NAME=${{git log -1 --pretty=%B | grep "#stable"}" >> "$GITHUB_OUTPUT"
           else
             echo "STABLE_COMMIT=false" >> "$GITHUB_OUTPUT"
             echo "Not a stable commit. Exiting."
           fi
 
+      - name: Test log
+        run: |
+          echo "${ steps.check_commit.outputs.STABLE_COMMIT_NAME }"
+          
       - name: Use Node.js ${{ matrix.node-version }}
         if: ${{ steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
         uses: actions/setup-node@v4
@@ -47,23 +46,20 @@ jobs:
       #   if: ${{ steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
       #   run: npm run test
 
+      - name: Sync development branch
+        if: ${{ success() && steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
+        uses: everlytic/branch-merge@1.1.2
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          source_ref: 'main'
+          target_branch: 'development'
+          commit_message_template: 'Synchronizing {target_branch} branch before merging into {source_ref}'
+          
       - name: Merge development to main
         if: ${{ success() && steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
-        run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-          git checkout main
-          git merge development
-          git push origin main
-        # uses: everlytic/branch-merge@1.1.2
-        # with:
-        #   github_token: ${{ secrets.PAT_TOKEN }}
-        #   source_ref: 'development'
-        #   target_branch: 'main'
-        #   commit_message_template: '[Automated] Merged {source_ref} into {target_branch}'
-          
-      # - name: Recreate development branch
-      #   if: ${{ success() && steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
-      #   run: |
-      #     git checkout -b development
-      #     git push origin development
+        uses: everlytic/branch-merge@1.1.2
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          source_ref: 'development'
+          target_branch: 'main'
+          commit_message_template: 'Merge {source_ref} into {target_branch} by an stable build'
