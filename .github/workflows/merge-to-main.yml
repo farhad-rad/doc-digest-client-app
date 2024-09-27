@@ -1,5 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
 name: Merge into main branch
 
@@ -17,38 +15,45 @@ jobs:
     steps:
       - name: Checkout client repository
         uses: actions/checkout@v3
-
+        
+      - name: Fetch all branches
+        run: git fetch --all
+        
+      - name: Checkout main branch
+        run: git checkout main
+  
       - name: Check last commit for #stable
         id: check_commit
         run: |
-          if ! git log -1 --pretty=%B | grep "#stable"; then
+          if git log -1 --pretty=%B | grep "#stable"; then
+            echo "STABLE_COMMIT=true" >> $GITHUB_ENV
+          else
+            echo "STABLE_COMMIT=false" >> $GITHUB_ENV
             echo "Not a stable commit. Exiting."
-            exit 0
           fi
   
       - name: Use Node.js ${{ matrix.node-version }}
+        if: env.STABLE_COMMIT == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 21.x
           cache: 'npm'
         
       # - name: Install dependencies
+      #   if: env.STABLE_COMMIT == 'true'
       #   run: npm install
 
       # - name: Run tests
+      #   if: env.STABLE_COMMIT == 'true'
       #   run: npm run test
 
       - name: Merge development to main
-        if: success()
+        if: success() && env.STABLE_COMMIT == 'true'
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
           git checkout main
           git merge development
           git push origin main
-
-      - name: Recreate development branch
-        if: success()
-        run: |
           git checkout -b development
           git push origin development
