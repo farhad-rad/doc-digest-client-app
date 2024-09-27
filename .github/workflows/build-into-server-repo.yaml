@@ -40,7 +40,7 @@ jobs:
         
       - name: Test echo
         run: |
-          echo ${{ secrets.SERVER_REPO_TOKEN }}
+          echo "${{ secrets.SERVER_REPO_TOKEN }}"
         
       - name: Copy dist to server public folder
         run: |
