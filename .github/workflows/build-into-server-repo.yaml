@@ -5,10 +5,10 @@ name: Build and Copy to Server Repository
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
-    
+    branches: ["main"]
+
 permissions: write-all
 
 jobs:
@@ -22,8 +22,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 21.x
-          cache: 'npm'
-          
+          cache: "npm"
+
       - name: Install dependencies
         run: npm install
 
@@ -42,7 +42,7 @@ jobs:
         run: |
           rm -rf server-app/public/
           mkdir server-app/public
-          mv -f dist/index.html server-app/src/views/spa-main.html
+          mv -f dist/index.html server-app/src/views/main.mustache
           cp -r dist/* server-app/public/
 
       - name: Commit and push to server main
