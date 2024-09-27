@@ -16,11 +16,11 @@ jobs:
       - name: Checkout client repository
         uses: actions/checkout@v3
         
-      - name: Fetch all branches
-        run: git fetch --all
+      # - name: Fetch all branches
+      #   run: git fetch --all
         
-      - name: Checkout main branch
-        run: git checkout main
+      # - name: Checkout main branch
+      #   run: git checkout main
   
       - name: Check last commit for #stable
         id: check_commit
