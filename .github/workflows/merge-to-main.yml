@@ -28,11 +28,6 @@ jobs:
             echo "Not a stable commit. Exiting."
           fi
 
-      - name: Test log
-        run: |
-          CN=${{ steps.check_commit.outputs.STABLE_COMMIT_NAME }}
-          echo $CN
-          
       - name: Use Node.js ${{ matrix.node-version }}
         if: ${{ steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
         uses: actions/setup-node@v4
@@ -64,4 +59,4 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           source_ref: 'development'
           target_branch: 'main'
-          commit_message_template: 'Merge {source_ref} into {target_branch} by an stable build'
+          commit_message_template: 'Merge {source_ref} into {target_branch} by an stable commit: ${{ steps.check_commit.outputs.STABLE_COMMIT_NAME }}'
