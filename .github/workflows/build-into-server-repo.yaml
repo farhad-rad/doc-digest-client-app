@@ -36,6 +36,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: main
 
+        
+      - name: List files
+        run: |
+          ls ./server-app/
+        
       - name: Copy dist to server public folder
         run: |
           cp -r dist/* server-app/public/
