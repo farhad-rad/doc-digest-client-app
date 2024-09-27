@@ -26,29 +26,29 @@ jobs:
         id: check_commit
         run: |
           if git log -1 --pretty=%B | grep "#stable"; then
-            echo "STABLE_COMMIT=true" >> $GITHUB_ENV
+            echo "STABLE_COMMIT=true" >> "$GITHUB_OUTPUT"
           else
-            echo "STABLE_COMMIT=false" >> $GITHUB_ENV
+            echo "STABLE_COMMIT=false" >> "$GITHUB_OUTPUT"
             echo "Not a stable commit. Exiting."
           fi
-  
+
       - name: Use Node.js ${{ matrix.node-version }}
-        if: env.STABLE_COMMIT == 'true'
+        if: ${{ steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
         uses: actions/setup-node@v4
         with:
           node-version: 21.x
           cache: 'npm'
         
       # - name: Install dependencies
-      #   if: env.STABLE_COMMIT == 'true'
+      #   if: ${{ steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
       #   run: npm install
 
       # - name: Run tests
-      #   if: env.STABLE_COMMIT == 'true'
+      #   if: ${{ steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
       #   run: npm run test
 
       - name: Merge development to main
-        if: success() && env.STABLE_COMMIT == 'true'
+        if: success() && ${{ steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
