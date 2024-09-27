@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-// Source and target directories
+// Source    and target directories
 const distFolder = path.join(__dirname, "dist");
 const targetPublicFolder = path.join(__dirname, "../server/public");
 const targetViewsFolder = path.join(__dirname, "../server/src/views");
