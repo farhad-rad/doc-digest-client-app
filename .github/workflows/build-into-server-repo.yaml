@@ -35,6 +35,7 @@ jobs:
           repository: farhad-rad/doc-digest-server-app
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: main
+          persist-credentials: true
 
         
       - name: List files
