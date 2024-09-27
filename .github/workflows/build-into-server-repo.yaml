@@ -35,14 +35,10 @@ jobs:
         with:
           path: server-app
           repository: farhad-rad/doc-digest-server-app
-          token: ${{ env.server_token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           ref: main
           persist-credentials: true
 
-      - name: Test echo
-        run: |
-          echo "${{ secrets.SERVER_REPO_TOKEN }}"
-        
       - name: Copy dist to server public folder
         run: |
           cp -r dist/* server-app/public/
@@ -55,3 +51,5 @@ jobs:
           git add public
           git commit -m "Updated public folder with latest client build"
           git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
