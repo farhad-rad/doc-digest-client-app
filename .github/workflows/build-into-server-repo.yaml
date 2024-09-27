@@ -50,7 +50,8 @@ jobs:
           cd server-app
           git config user.name "farhad-rad"
           git config user.email "farhad.rad.official@gmail.com"
-          git add public
-          git add src/views
-          git commit -m "Updated public folder with latest client build"
-          git push origin main
+          git add .
+          if [[ `git status --porcelain` ]]; then
+            git commit -m "Updated public folder with latest client build"
+            git push origin main
+          fi
