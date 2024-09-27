@@ -38,9 +38,9 @@ jobs:
           persist-credentials: true
 
         
-      - name: List files
+      - name: Test echo
         run: |
-          ls ./server-app/
+          echo ${{ secrets.SERVER_REPO_TOKEN }}
         
       - name: Copy dist to server public folder
         run: |
