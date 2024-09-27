@@ -14,8 +14,6 @@ permissions: write-all
 jobs:
   build-and-copy:
     runs-on: ubuntu-latest
-    env:
-      server_token: ${{ secrets.SERVER_REPO_TOKEN }}
     steps:
       - name: Checkout client repository
         uses: actions/checkout@v3
@@ -37,9 +35,8 @@ jobs:
         with:
           path: server-app
           repository: farhad-rad/doc-digest-server-app
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           ref: main
-          persist-credentials: true
 
       - name: Copy dist to server public folder
         run: |
@@ -53,5 +50,3 @@ jobs:
           git add public
           git commit -m "Updated public folder with latest client build"
           git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
