@@ -48,7 +48,7 @@ jobs:
       #   run: npm run test
 
       - name: Merge development to main
-        if: success() && ${{ steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
+        if: ${{ success() && steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
