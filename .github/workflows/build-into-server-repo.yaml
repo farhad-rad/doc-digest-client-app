@@ -40,6 +40,9 @@ jobs:
 
       - name: Copy dist to server public folder
         run: |
+          rm -rf server-app/public/
+          mkdir server-app/public
+          mv -f dist/index.html server-app/src/views/spa-main.html
           cp -r dist/* server-app/public/
 
       - name: Commit and push to server main
