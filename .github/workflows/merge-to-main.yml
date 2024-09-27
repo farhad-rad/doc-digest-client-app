@@ -30,7 +30,8 @@ jobs:
 
       - name: Test log
         run: |
-          echo "${ steps.check_commit.outputs.STABLE_COMMIT_NAME }"
+          CN=${{ steps.check_commit.outputs.STABLE_COMMIT_NAME }}
+          echo $CN
           
       - name: Use Node.js ${{ matrix.node-version }}
         if: ${{ steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
