@@ -49,20 +49,11 @@ jobs:
 
       - name: Merge development to main
         if: ${{ success() && steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
-        uses: devmasx/merge-branch@master
-        with:
-          type: now
-          from_branch: development
-          target_branch: main
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Merge development to main
-        if: ${{ success() && steps.check_commit.outputs.STABLE_COMMIT == 'true' }}
         uses: everlytic/branch-merge@1.1.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_ref: 'development'
-          target_branch: 'master'
+          target_branch: 'main'
           commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
           
       - name: Recreate development branch
