@@ -5,7 +5,7 @@
   "scripts": {
     "watch": "vite",
     "start": "vite preview",
-    "build": "vue-tsc -b && vite build && node ./post-build.cjs && rm -rf ./dist"
+    "build": "vue-tsc -b && vite build"
   },
   "repository": {
     "type": "git",

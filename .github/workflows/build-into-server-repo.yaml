@@ -1,0 +1,56 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Build and Copy to Server Repository
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+permissions: write-all
+
+jobs:
+  build-and-copy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout client repository
+        uses: actions/checkout@v3
+
+      - name: Use Node.js 21
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21.x
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build
+        run: npm run build
+
+      - name: Checkout server repository
+        uses: actions/checkout@v3
+        with:
+          path: server-app
+          repository: farhad-rad/doc-digest-server-app
+          token: ${{ secrets.PAT_TOKEN }}
+          ref: main
+
+      - name: Copy dist to server public folder
+        run: |
+          rm -rf server-app/public/
+          mkdir server-app/public
+          mv -f dist/index.html server-app/src/views/spa-main.html
+          cp -r dist/* server-app/public/
+
+      - name: Commit and push to server main
+        run: |
+          cd server-app
+          git config user.name "farhad-rad"
+          git config user.email "farhad.rad.official@gmail.com"
+          git add public
+          git add src/views
+          git commit -m "Updated public folder with latest client build"
+          git push origin main
