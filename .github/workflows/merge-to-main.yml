@@ -21,7 +21,7 @@ jobs:
         run: |
           if git log -1 --pretty=%B | grep "#stable"; then
             echo "STABLE_COMMIT=true" >> "$GITHUB_OUTPUT"
-            CN=git log -1 --pretty=%B | grep "#stable";
+            CN=$(git log -1 --pretty=%B | grep "#stable")
             echo "STABLE_COMMIT_NAME=${CN}" >> "$GITHUB_OUTPUT"
           else
             echo "STABLE_COMMIT=false" >> "$GITHUB_OUTPUT"
