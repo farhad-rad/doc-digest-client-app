@@ -1,0 +1,29 @@
+{
+  "name": "doc-digest-client",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "watch": "vite",
+    "start": "vite preview",
+    "build": "vue-tsc -b && vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farhad-rad/doc-digest-client-app.git"
+  },
+  "author": "Farhad Rad (farhad.rad.official@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/farhad-rad/doc-digest-client-app/issues"
+  },
+  "homepage": "https://github.com/farhad-rad/doc-digest-client-app#readme",
+  "dependencies": {
+    "vue": "^3.4.37"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.1",
+    "vue-tsc": "^2.0.29"
+  }
+}
